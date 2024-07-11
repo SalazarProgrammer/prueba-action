@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/ && git pull origin main && sudo systemctl restart"
+          ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/index.php && git pull origin main && sudo systemctl restart index.php"
