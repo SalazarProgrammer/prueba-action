@@ -1,9 +1,6 @@
-name: Deploy to Server
+name: Deployment Workflow
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   deploy:
@@ -17,11 +14,8 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-add: true
-          ssh-add-identity: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-add-passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
       - name: Deploy to Server
-        run: |
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -K
-          ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/ && git pull origin main && sudo reboot"
+        run:
+          ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/ && git pull
+          origin main && sudo reboot"
