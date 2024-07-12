@@ -13,10 +13,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Paso para crear la clave SSH y agregarla al agente SSH
+      - name: Create SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private.key
+          chmod 400 private.key
+
+      - name: Start SSH agent and add key
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add private.key
+
+      # Configura el agente SSH con la clave privada creada
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+          ssh-private-key: ${{secrets.SSH_PRIVATE_KEY}}
 
       - name: Deploy to Server
         run: |
