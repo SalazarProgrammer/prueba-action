@@ -7,6 +7,6 @@
 </head>
 <body>
 <h1>Prueba Action</h1>
-<h2>Vigésima sexta prueba: Archivo enviado desde Git a Servidor #26.</h2>
+<h2>Vigésima séptima prueba: Archivo enviado desde Git a Servidor #27.</h2>
 </body>
 </html>
