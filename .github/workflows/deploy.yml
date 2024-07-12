@@ -5,17 +5,17 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy to Server
-        run:
-          ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/ && git pull
-          origin main && sudo reboot"
+          host: ssh-proof.alwaysdata.net
+          username: proof
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/proof/www/
+            git pull origin main
+            sudo reboot
