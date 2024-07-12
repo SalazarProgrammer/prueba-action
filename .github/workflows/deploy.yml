@@ -17,10 +17,11 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add SSH Key Passphrase
-        run: echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -
+          ssh-add: true
+          ssh-add-identity: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-add-passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
       - name: Deploy to Server
         run: |
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -K
           ssh proof@ssh-proof.alwaysdata.net "cd /home/proof/www/ && git pull origin main && sudo reboot"
