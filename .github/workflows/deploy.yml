@@ -15,9 +15,11 @@ jobs:
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
-        with: |
+        with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH-PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+
+      - name: Add SSH Key Passphrase
+        run: echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -
 
       - name: Deploy to Server
         run: |
