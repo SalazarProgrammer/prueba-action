@@ -1,21 +1,31 @@
-name: Deployment Workflow
+name: Despliegue Automático
 
-on: [push]
+on:
+  push:
+    branches:
+      - main # Cambia 'main' por la rama que desees monitorear
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Deploy to server
+      - name: Install SSH Keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Remote Server
         uses: appleboy/ssh-action@master
         with:
-          host: ssh-proof.alwaysdata.net
-          username: proof
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/proof/www/
+            cd ${{ secrets.WORK_DIR }}
             git pull origin main
             sudo reboot
